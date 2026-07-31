@@ -1,0 +1,206 @@
+.yfd-dashboard {
+    padding: 24px 28px 40px;
+    background: #f5f6f8;
+    min-height: 100%;
+    color: #2b2f38;
+    font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+
+    * {
+        box-sizing: border-box;
+    }
+
+    /* ===== Header ===== */
+    .yfd-header {
+        margin-bottom: 4px;
+    }
+
+    .yfd-title {
+        font-size: 1.55rem;
+        font-weight: 700;
+        color: #1f2430;
+    }
+
+    .yfd-subtitle {
+        font-size: .88rem;
+        color: #8a94a6;
+    }
+
+    .yfd-refresh-btn {
+        background: #ffffff;
+        border: 1px solid #e1e4ea;
+        color: #495166;
+        font-weight: 600;
+        font-size: .85rem;
+        padding: .5rem 1.1rem;
+        border-radius: 8px;
+        transition: all .15s ease;
+
+        &:hover {
+            background: #3b6ef6;
+            border-color: #3b6ef6;
+            color: #fff;
+        }
+    }
+
+    .yfd-spinner {
+        color: #3b6ef6;
+    }
+
+    /* ===== KPI Cards ===== */
+    .yfd-kpi {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        background: #ffffff;
+        border: 1px solid #ecedf1;
+        border-radius: 12px;
+        padding: 18px 20px;
+        height: 100%;
+        cursor: pointer;
+        transition: box-shadow .15s ease, transform .15s ease;
+        box-shadow: 0 1px 2px rgba(16, 24, 40, .04);
+
+        &:hover {
+            box-shadow: 0 6px 16px rgba(16, 24, 40, .08);
+            transform: translateY(-2px);
+        }
+    }
+
+    .yfd-kpi-icon {
+        width: 42px;
+        height: 42px;
+        min-width: 42px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.05rem;
+        color: #fff;
+    }
+
+    .yfd-kpi-income .yfd-kpi-icon { background: #2e9e6d; }
+    .yfd-kpi-expense .yfd-kpi-icon { background: #d9534f; }
+    .yfd-kpi-profit .yfd-kpi-icon { background: #3b6ef6; }
+    .yfd-kpi-loss .yfd-kpi-icon { background: #d9534f; }
+    .yfd-kpi-neutral .yfd-kpi-icon { background: #8a94a6; }
+
+    .yfd-kpi-label {
+        font-size: .78rem;
+        color: #8a94a6;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: .4px;
+    }
+
+    .yfd-kpi-value {
+        font-size: 1.35rem;
+        font-weight: 700;
+        color: #1f2430;
+        margin-top: 2px;
+    }
+
+    /* ===== Panels ===== */
+    .yfd-panel {
+        background: #ffffff;
+        border: 1px solid #ecedf1;
+        border-radius: 12px;
+        padding: 18px 20px;
+        box-shadow: 0 1px 2px rgba(16, 24, 40, .04);
+        height: 100%;
+    }
+
+    .yfd-panel-title {
+        font-size: .95rem;
+        font-weight: 700;
+        color: #1f2430;
+        margin-bottom: 14px;
+    }
+
+    .yfd-chart-wrap {
+        position: relative;
+        height: 260px;
+    }
+
+    .yfd-chart-wrap-sm {
+        height: 260px;
+    }
+
+    /* ===== Tables ===== */
+    .yfd-table {
+        font-size: .88rem;
+
+        thead th {
+            border: none;
+            border-bottom: 1px solid #ecedf1;
+            color: #8a94a6;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: .72rem;
+            letter-spacing: .4px;
+            padding-bottom: 10px;
+        }
+
+        tbody td {
+            border-color: #f2f3f5;
+            vertical-align: middle;
+            padding-top: 10px;
+            padding-bottom: 10px;
+            color: #2b2f38;
+        }
+    }
+
+    .yfd-cat-row {
+        cursor: pointer;
+
+        &:hover {
+            background: #f8f9fb;
+        }
+    }
+
+    .yfd-cat-icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 26px;
+        height: 26px;
+        border-radius: 6px;
+        background: #eef1fb;
+        color: #3b6ef6;
+        font-size: .75rem;
+        margin-right: 10px;
+    }
+
+    .yfd-text-income { color: #2e9e6d; }
+    .yfd-text-expense { color: #d9534f; }
+
+    .yfd-badge {
+        display: inline-block;
+        padding: 3px 10px;
+        border-radius: 20px;
+        font-size: .72rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: .3px;
+    }
+
+    .yfd-badge-income {
+        background: rgba(46, 158, 109, .12);
+        color: #2e9e6d;
+    }
+
+    .yfd-badge-expense {
+        background: rgba(217, 83, 79, .12);
+        color: #d9534f;
+    }
+
+    .yfd-link {
+        font-size: .82rem;
+        font-weight: 600;
+        color: #3b6ef6;
+        text-decoration: none;
+
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+}

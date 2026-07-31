@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_youth_finance_tree" model="ir.ui.view">
+        <field name="name">youth.finance.list</field>
+        <field name="model">youth.finance</field>
+        <field name="arch" type="xml">
+            <list string="Financial Entries" editable="bottom"
+                decoration-success="type == 'income'"
+                decoration-danger="type == 'expense'">
+                <field name="date"/>
+                <field name="name"/>
+                <field name="event_id"/>
+                <field name="event_type" optional="hide"/>
+                <field name="type"/>
+                <field name="amount" sum="Total"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_youth_finance_form" model="ir.ui.view">
+        <field name="name">youth.finance.form</field>
+        <field name="model">youth.finance</field>
+        <field name="arch" type="xml">
+            <form string="Financial Entry">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="event_id"/>
+                        <field name="type"/>
+                        <field name="amount"/>
+                        <field name="date"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_youth_finance_pivot" model="ir.ui.view">
+        <field name="name">youth.finance.pivot</field>
+        <field name="model">youth.finance</field>
+        <field name="arch" type="xml">
+            <pivot string="Finance Analysis">
+                <field name="event_type" type="row"/>
+                <field name="type" type="col"/>
+                <field name="amount" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="view_youth_finance_graph" model="ir.ui.view">
+        <field name="name">youth.finance.graph</field>
+        <field name="model">youth.finance</field>
+        <field name="arch" type="xml">
+            <graph string="Finance Analysis" type="bar">
+                <field name="date" interval="month"/>
+                <field name="amount" type="measure"/>
+                <field name="type"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="view_youth_finance_search" model="ir.ui.view">
+        <field name="name">youth.finance.search</field>
+        <field name="model">youth.finance</field>
+        <field name="arch" type="xml">
+            <search string="Search Finance Entries">
+                <field name="name"/>
+                <field name="event_id"/>
+                <filter string="Income" name="filter_income" domain="[('type', '=', 'income')]"/>
+                <filter string="Expense" name="filter_expense" domain="[('type', '=', 'expense')]"/>
+                <group>
+                    <filter string="Category" name="groupby_category" context="{'group_by': 'event_type'}"/>
+                    <filter string="Type" name="groupby_type" context="{'group_by': 'type'}"/>
+                    <filter string="Activity" name="groupby_event" context="{'group_by': 'event_id'}"/>
+                    <filter string="Month" name="groupby_month" context="{'group_by': 'date:month'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_youth_finance" model="ir.actions.act_window">
+        <field name="name">Income &amp; Expenses</field>
+        <field name="res_model">youth.finance</field>
+        <field name="view_mode">list,form,pivot,graph</field>
+        <field name="search_view_id" ref="view_youth_finance_search"/>
+    </record>
+</odoo>

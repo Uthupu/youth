@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="youth.NinjaDashboard">
+        <div class="yfd-dashboard">
+            <!-- Header -->
+            <div class="yfd-header d-flex justify-content-between align-items-center flex-wrap gap-2">
+                <div>
+                    <h2 class="yfd-title mb-0">St: George Youth</h2>
+                    <p class="yfd-subtitle mb-0">Income, expenses &amp; profit across all activities</p>
+                </div>
+                <button class="btn yfd-refresh-btn" t-on-click="loadDashboardData">
+                    <i class="fa fa-refresh me-1"/> Refresh
+                </button>
+            </div>
+
+            <t t-if="state.loading">
+                <div class="text-center py-5">
+                    <div class="spinner-border yfd-spinner" role="status"></div>
+                </div>
+            </t>
+
+            <t t-else="">
+                <!-- KPI Cards -->
+                <div class="row g-3 mt-1">
+                    <div class="col-md-3 col-sm-6">
+                        <div class="yfd-kpi yfd-kpi-income" t-on-click="showIncomeInfo">
+                            <div class="yfd-kpi-icon"><i class="fa fa-arrow-up"/></div>
+                            <div>
+                                <div class="yfd-kpi-label">Total Income</div>
+                                <div class="yfd-kpi-value">₹<t t-esc="this.formatCurrency(state.data.summary.total_income)"/></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3 col-sm-6">
+                        <div class="yfd-kpi yfd-kpi-expense" t-on-click="showExpenseInfo">
+                            <div class="yfd-kpi-icon"><i class="fa fa-arrow-down"/></div>
+                            <div>
+                                <div class="yfd-kpi-label">Total Expense</div>
+                                <div class="yfd-kpi-value">₹<t t-esc="this.formatCurrency(state.data.summary.total_expense)"/></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3 col-sm-6">
+                        <div t-attf-class="yfd-kpi {{ state.data.summary.net_profit >= 0 ? 'yfd-kpi-profit' : 'yfd-kpi-loss' }}">
+                            <div class="yfd-kpi-icon"><i class="fa fa-inr"></i></div>
+                            <div>
+                                <div class="yfd-kpi-label">Cash in Hand</div>
+                                <div class="yfd-kpi-value">₹<t t-esc="this.formatCurrency(state.data.summary.net_profit)"/></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3 col-sm-6">
+                        <div class="yfd-kpi yfd-kpi-neutral" t-on-click="() => this.openEventView(null)">
+                            <div class="yfd-kpi-icon"><i class="fa fa-calendar"/></div>
+                            <div>
+                                <div class="yfd-kpi-label">Total Activities</div>
+                                <div class="yfd-kpi-value"><t t-esc="state.data.summary.total_events"/></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts -->
+                <div class="row g-3 mt-1">
+                    <div class="col-lg-8">
+                        <div class="yfd-panel">
+                            <div class="yfd-panel-title">Income vs Expense (Last 6 Months)</div>
+                            <div class="yfd-chart-wrap">
+                                <canvas t-ref="trendCanvas"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="yfd-panel">
+                            <div class="yfd-panel-title">Profit Share by Category</div>
+                            <div class="yfd-chart-wrap yfd-chart-wrap-sm">
+                                <canvas t-ref="breakdownCanvas"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Category Breakdown -->
+                <div class="yfd-panel mt-3">
+                    <div class="yfd-panel-title">Category Breakdown</div>
+                    <div class="table-responsive">
+                        <table class="table yfd-table mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Category</th>
+                                    <th class="text-center">Activities</th>
+                                    <th class="text-end">Income</th>
+                                    <th class="text-end">Expense</th>
+                                    <th class="text-end">Profit / Loss</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="state.data.breakdown" t-as="cat" t-key="cat.key">
+                                    <tr class="yfd-cat-row" t-on-click="() => this.openEventView(cat.key)">
+                                        <td>
+                                            <span t-attf-class="yfd-cat-icon fa {{cat.icon}}"/>
+                                            <span class="fw-semibold"><t t-esc="cat.label"/></span>
+                                        </td>
+                                        <td class="text-center"><t t-esc="cat.count"/></td>
+                                        <td class="text-end yfd-text-income">₹<t t-esc="this.formatCurrency(cat.income)"/></td>
+                                        <td class="text-end yfd-text-expense">₹<t t-esc="this.formatCurrency(cat.expense)"/></td>
+                                        <td t-attf-class="text-end fw-bold {{cat.profit >= 0 ? 'yfd-text-income' : 'yfd-text-expense'}}">
+                                            ₹<t t-esc="this.formatCurrency(cat.profit)"/>
+                                        </td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Recent Transactions -->
+                <div class="yfd-panel mt-3">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="yfd-panel-title mb-0">Recent Transactions</div>
+                        <a href="#" class="yfd-link" t-on-click.prevent="openFinanceView">View all</a>
+                    </div>
+                    <div class="table-responsive mt-2">
+                        <table class="table yfd-table mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Description</th>
+                                    <th>Activity</th>
+                                    <th>Type</th>
+                                    <th class="text-end">Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-if="state.data.recent_finances.length === 0">
+                                    <tr><td colspan="5" class="text-center text-muted py-3">No transactions recorded yet.</td></tr>
+                                </t>
+                                <t t-foreach="state.data.recent_finances" t-as="item" t-key="item.id">
+                                    <tr>
+                                        <td><t t-esc="item.date"/></td>
+                                        <td class="fw-semibold"><t t-esc="item.name"/></td>
+                                        <td class="text-muted"><t t-esc="item.event_name"/></td>
+                                        <td>
+                                            <span t-attf-class="yfd-badge {{item.type == 'income' ? 'yfd-badge-income' : 'yfd-badge-expense'}}">
+                                                <t t-esc="item.type == 'income' ? 'Income' : 'Expense'"/>
+                                            </span>
+                                        </td>
+                                        <td t-attf-class="text-end fw-bold {{item.type == 'income' ? 'yfd-text-income' : 'yfd-text-expense'}}">
+                                            ₹<t t-esc="this.formatCurrency(item.amount)"/>
+                                        </td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </t>
+        </div>
+    </t>
+</templates>

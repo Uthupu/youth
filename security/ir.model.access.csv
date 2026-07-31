@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_youth_event,access_youth_event,model_youth_event,base.group_user,1,1,1,1
+access_youth_participant,access_youth_participant,model_youth_participant,base.group_user,1,1,1,1
+access_youth_finance,access_youth_finance,model_youth_finance,base.group_user,1,1,1,1

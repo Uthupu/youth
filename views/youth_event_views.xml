@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_youth_event_form" model="ir.ui.view">
+        <field name="name">youth.event.form</field>
+        <field name="model">youth.event</field>
+        <field name="arch" type="xml">
+            <form string="Activity">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="event_type"/>
+                            <field name="date"/>
+                        </group>
+                        <group string="Financial Overview">
+                            <field name="total_fees" invisible="event_type != 'tour'"/>
+                            <field name="other_income"/>
+                            <field name="total_income"/>
+                            <field name="total_expense"/>
+                            <field name="net_profit"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Participants" invisible="event_type != 'tour'">
+                            <field name="participant_ids">
+                                <list editable="bottom">
+                                    <field name="name"/>
+                                    <field name="total_person" sum="Total Persons"/>
+                                    <field name="amount" sum="Total Fees Collected"/>
+                                    <field name="notes"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Other Income &amp; Expenses">
+                            <field name="finance_ids">
+                                <list editable="bottom"
+                                    decoration-success="type == 'income'"
+                                    decoration-danger="type == 'expense'">
+
+                                    <field name="date"/>
+                                    <field name="name"/>
+                                    <field name="type"/>
+                                    <field name="amount"/>
+
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Notes">
+                            <field name="notes"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_youth_event_tree" model="ir.ui.view">
+        <field name="name">youth.event.list</field>
+        <field name="model">youth.event</field>
+        <field name="arch" type="xml">
+            <list string="Activities"
+                decoration-success="net_profit &gt;= 0"
+                decoration-danger="net_profit &lt; 0">
+
+                <field name="name"/>
+                <field name="event_type"/>
+                <field name="date"/>
+                <field name="participant_count" optional="hide"/>
+
+                <field name="total_income" sum="Total Income"/>
+                <field name="total_expense" sum="Total Expense"/>
+                <field name="net_profit" sum="Total Profit"/>
+
+            </list>
+        </field>
+    </record>
+
+    <record id="view_youth_event_search" model="ir.ui.view">
+        <field name="name">youth.event.search</field>
+        <field name="model">youth.event</field>
+        <field name="arch" type="xml">
+            <search string="Search Activities">
+                <field name="name"/>
+                <field name="event_type"/>
+                <filter string="Tours" name="filter_tour" domain="[('event_type', '=', 'tour')]"/>
+                <filter string="Ice Cream Stalls" name="filter_ice_cream" domain="[('event_type', '=', 'ice_cream')]"/>
+                <filter string="Radham" name="filter_radham" domain="[('event_type', '=', 'radham')]"/>
+                <filter string="Events / Conventions" name="filter_convention" domain="[('event_type', '=', 'convention')]"/>
+                <separator/>
+                <filter string="Profitable" name="filter_profit" domain="[('net_profit', '&gt;=', 0)]"/>
+                <filter string="Loss" name="filter_loss" domain="[('net_profit', '&lt;', 0)]"/>
+                <group>
+                    <filter string="Category" name="groupby_category" context="{'group_by': 'event_type'}"/>
+                    <filter string="Date" name="groupby_date" context="{'group_by': 'date'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+
+    <record id="action_youth_event" model="ir.actions.act_window">
+        <field name="name">Activities</field>
+        <field name="res_model">youth.event</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_youth_event_search"/>
+        <field name="context">{'search_default_groupby_category': 1}</field>
+    </record>
+</odoo>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_youth_root" name="Youth" sequence="10" web_icon="youth,static/description/icon.png"/>
+
+    <!-- Ninja Dashboard as the default main menu -->
+    <menuitem id="menu_youth_ninja_dashboard" name="Dashboard" parent="menu_youth_root" action="action_youth_ninja_dashboard" sequence="1"/>
+
+    <menuitem id="menu_youth_event" name="Activities" parent="menu_youth_root" action="action_youth_event" sequence="10"/>
+    <menuitem id="menu_youth_finance" name="Finance Ledger" parent="menu_youth_root" action="action_youth_finance" sequence="20"/>
+</odoo>
